@@ -10,7 +10,7 @@ app.use(express.json())
 
 //mongo
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER}:${process.env.SECRET_KEY}@cluster0.t241ufd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -44,6 +44,22 @@ async function run() {
       res.send(result);
     });
 
+    app.get('/spots/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await spotCollection.findOne(query);
+      res.send(result);
+  })
+
+
+    //  Get data by email holder
+    app.get('/myList/:email', async (req, res) => {
+      // console.log(req.params.email);
+      const mail = req.params.email;
+      const results = await spotCollection.find({ userEmail: mail }).toArray();
+      res.send(results);
+    });
+ 
 
     // Send a ping to confirm a successful connection
     //await client.db("admin").command({ ping: 1 });
