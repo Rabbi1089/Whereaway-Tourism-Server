@@ -59,7 +59,14 @@ async function run() {
       const results = await spotCollection.find({ userEmail: mail }).toArray();
       res.send(results);
     });
- 
+    
+    app.delete('/spots/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      console.log(query)
+      const result = await spotCollection.deleteOne(query);
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     //await client.db("admin").command({ ping: 1 });
